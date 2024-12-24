@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10">
+    <command:details>
+      <command:name>Get-TmMsiToken</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>TmMsiToken</command:noun>
+      <maml:description>
+        <maml:para>Get a token using managed identity</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Microsoft just released support for using managed identities as federated credentials, this library helps you get tokens.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-TmMsiToken</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="none">
+          <maml:name>TenantId</maml:name>
+          <maml:description>
+            <maml:para>
+            Specifies the tenant id for which you want a token
+            </maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+          <maml:name>ClientId</maml:name>
+          <maml:description>
+            <maml:para>
+            Specify the client id of your multi-tenant application
+            </maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+          <maml:name>Scope</maml:name>
+          <maml:description>
+            <maml:para>
+            Specify the scope for which you want a token (ending with `/.default`)
+            </maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+          <maml:name>MsiScope</maml:name>
+          <maml:description>
+            <maml:para />
+          </maml:description>
+          <command:parameterValue required="false" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+          <maml:name>UserAssignedIdentity</maml:name>
+          <maml:description>
+            <maml:para>
+            The user assigned identity to use, if not set, the system assigned identity will be used
+            </maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="none">
+        <maml:name>TenantId</maml:name>
+        <maml:description>
+          <maml:para>
+            Specifies the tenant id for which you want a token
+            </maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="1" aliases="none">
+        <maml:name>ClientId</maml:name>
+        <maml:description>
+          <maml:para>
+            Specify the client id of your multi-tenant application
+            </maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="2" aliases="none">
+        <maml:name>Scope</maml:name>
+        <maml:description>
+          <maml:para>
+            Specify the scope for which you want a token (ending with `/.default`)
+            </maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
+        <maml:name>MsiScope</maml:name>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="4" aliases="none">
+        <maml:name>UserAssignedIdentity</maml:name>
+        <maml:description>
+          <maml:para>
+            The user assigned identity to use, if not set, the system assigned identity will be used
+            </maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>System.String</maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <command:examples>
+      <command:example>
+        <maml:title>------------  Get a token for Graph using system-assigned identity  ------------</maml:title>
+        <dev:code>PS C:\&gt; Get-TmMsiToken -TenantId "svrooij.io" -ClientId "81386206-d7fb-402a-b9dd-a4ed5bc3ef71" -Scope https://graph.microsoft.com/.default</dev:code>
+        <dev:remarks>
+          <maml:para>This will use the system assigned managed identity to get a token
+</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------  Get a token for Graph using user-assigned identity  -------------</maml:title>
+        <dev:code>PS C:\&gt; Get-TmMsiToken -TenantId "svrooij.io" -ClientId "81386206-d7fb-402a-b9dd-a4ed5bc3ef71" -Scope https://graph.microsoft.com/.default -UserAssignedIdentity "a9f67427-921a-4aab-8c20-5a8a0acdd2a6"</dev:code>
+        <dev:remarks>
+          <maml:para>This will use the user assigned managed identity to get a token
+</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+  </command:command>
+</helpItems>

@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "dotnet: build-module",
+			"command": "dotnet build ${workspaceFolder}\\TokenMagician.csproj",
+			"group": {
+					"kind": "build",
+					"isDefault": true
+			},
+			"problemMatcher": "$msCompile"
+		}
+	]
+}

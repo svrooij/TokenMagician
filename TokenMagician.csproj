@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	<PowerShellDocsFile>TokenMagician.dll-Help.xml</PowerShellDocsFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.13.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.1" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.24" />
+    <PackageReference Include="Svrooij.PowerShell.DI" Version="1.2.0" />
+  </ItemGroup>
+
+	<Target Name="GenerateDocumentation" AfterTargets="AfterBuild" Outputs="$(PowerShellDocsFile)" Condition="!Exists($(PowerShellDocsFile))">
+		<Message Text="Generating $(PowerShellDocsFile)" Importance="high" />
+		<Message Text="Project path $(ProjectDir)" Importance="high" />
+		<Message Text="Output path $(OutputPath)" Importance="high" />
+		<Exec Command="pwsh-docs --dll $(ProjectDir)$(OutputPath)\TokenMagician.dll --use-xml-docs --maml-file $(ProjectDir)\$(PowerShellDocsFile)" />
+		<OnError ExecuteTargets="DocsGenerationError" />
+	</Target>
+
+	<Target Name="DocsGenerationError">
+		<Error Text="Documentation could not be generated" />
+	</Target>
+
+	<Target Name="RemoveDocumentation" AfterTargets="CoreClean">
+		<Delete Files="$(PowerShellDocsFile)" />
+	</Target>
+
+  <ItemGroup>
+	<None Update="TokenMagician.dll-Help.xml">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TokenMagician.psd1">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="TokenMagician.psm1">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
+</Project>
