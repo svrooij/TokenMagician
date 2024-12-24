@@ -4,10 +4,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	<PowerShellDocsFile>TokenMagician.dll-Help.xml</PowerShellDocsFile>
+		<NoWarn>CS8618;CS0649;CS8669</NoWarn>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<PowerShellDocsFile>TokenMagician.dll-Help.xml</PowerShellDocsFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+	  <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

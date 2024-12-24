@@ -1,0 +1,151 @@
+name: 🏗️🧪📦 WinTuner
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+  
+
+jobs:
+  testps:
+    name: 🛠️ Test PowerShell Module
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      checks: write
+      pull-requests: write
+    steps:
+      - name: 👨‍💻 Check-out code
+        uses: actions/checkout@v4
+
+      - name: 👨‍🔧 Setup .NET Core SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: 🔍 Enable problem matchers
+        run: echo "::add-matcher::.github/matchers/dotnet.json"
+
+      - name: 🦸‍♂️ Restore steriods
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: 🎒 Load packages
+        run: dotnet restore
+
+      - name: 🛠️ Build module
+        shell: pwsh
+        run:
+          dotnet build ./src/TokenMagician/TokenMagician.csproj --configuration Release --no-restore -p:Version="0.0.1-dev" -o ./dist/TokenMagician
+      
+      - name: 📦 Install Pester
+        shell: pwsh
+        run: Install-Module -Name Pester -Force -SkipPublisherCheck -Scope CurrentUser
+      
+      - name: 🕵️ Import module and list commands
+        shell: pwsh
+        run: |
+          Import-Module ./dist/TokenMagician/TokenMagician.psd1
+          Get-Command -Module TokenMagician
+      
+      - name: 🧪 Run test
+        shell: pwsh
+        run: |
+          Import-Module Pester
+          Import-Module ./dist/TokenMagician/TokenMagician.psd1
+          $pesterConfig = [PesterConfiguration]@{
+            Output = @{
+              Verbosity = "Normal"
+              CIFormat = "Auto"
+              StackTraceVerbosity = "FirstLine"
+            }
+            TestResult = @{
+              Enabled = $true
+              OutputPath = "${{ github.workspace }}/testresults/TestResults.xml"
+              OutputFormat = "JUnitXml"
+            }
+            Run = @{
+              Path = "./tests/TokenMagician"
+              Exit = $true
+            }
+            Should = @{
+              ErrorAction = "Continue"
+            }
+          }
+          Invoke-Pester -Configuration $pesterConfig
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: ${{ github.workspace }}/testresults/*.xml
+
+  publish-psgallery:
+    name: 📦 Publish TokenMagician to PowerShell Gallery
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [testps]
+    steps:
+    - name: 👨‍💻 Check-out code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 👨‍🔧 Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.x
+
+    - name: 🔍 Enable problem matchers
+      run: echo "::add-matcher::.github/matchers/dotnet.json"
+
+    - name: 🦸‍♂️ Restore steriods
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget
+
+    - name: 🎒 Load packages
+      run: dotnet restore
+
+    - name: 📝 Set module version
+      shell: pwsh
+      id: version
+      run: |
+        $version = "${{ github.ref_name }}".Substring(1)
+        $module = Get-Content -Path src/TokenMagician/TokenMagician.psd1
+        $module = $module -replace 'ModuleVersion = ''\d+\.\d+\.\d+''', "ModuleVersion = '$version'"
+        $module | Set-Content -Path src/TokenMagician/TokenMagician.psd1
+
+    - name: 🛠️ Build module
+      shell: pwsh
+      run: dotnet build ./src/TokenMagician/TokenMagician.csproj --configuration Release --no-restore -p:Version=$("${{ github.ref_name }}".Substring(1)) -o ./dist/TokenMagician
+    
+    - name: 🧪 Import module
+      shell: pwsh
+      run: |
+        Import-Module ./dist/TokenMagician/TokenMagician.psd1
+        Get-Command -Module TokenMagician
+    
+    - name: 📦 Publish TokenMagician to PowerShell Gallery
+      shell: pwsh
+      run: |
+        Import-Module ./dist/TokenMagician/TokenMagician.psd1
+        Publish-Module -Path ./dist/TokenMagician -NuGetApiKey $env:PSGALLERY_TOKEN -Repository PSGallery -Force
+      env:
+        PSGALLERY_TOKEN: ${{ secrets.PSGALLERY_TOKEN }}
