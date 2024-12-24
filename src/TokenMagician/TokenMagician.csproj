@@ -10,6 +10,7 @@
 		<NoWarn>CS8618;CS0649;CS8669</NoWarn>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 		<PowerShellDocsFile>TokenMagician.dll-Help.xml</PowerShellDocsFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
 	  <NoWarn>$(NoWarn);CS1591</NoWarn>
@@ -31,7 +32,7 @@
 	</Target>
 
 	<Target Name="DocsGenerationError">
-		<Error Text="Documentation could not be generated" />
+		<Error Text="Documentation could not be generated. Did you install https://www.nuget.org/packages/Svrooij.PowerShell.Docs" />
 	</Target>
 
 	<Target Name="RemoveDocumentation" AfterTargets="CoreClean">
@@ -39,6 +40,7 @@
 	</Target>
 
   <ItemGroup>
+	<None Include="..\..\README.md" Pack="true" PackagePath="\README.md" />
 	<None Update="TokenMagician.dll-Help.xml">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>

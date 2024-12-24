@@ -84,7 +84,7 @@
     # Private data to pass to the module specified in RootModule/ModuleToProcess.
     PrivateData = @{
         PSData = @{
-            Tags = @('Tokens', 'Managed Identity', 'Multi Tenant')
+            Tags = @('Tokens', 'Managed-Identity', 'Multi-Tenant', 'EntraID')
 
             LisenceUri = 'https://github.com/svrooij/TokenMagician/blob/main/LICENSE.txt'
             ProjectUri = 'https://github.com/svrooij/TokenMagician/'
