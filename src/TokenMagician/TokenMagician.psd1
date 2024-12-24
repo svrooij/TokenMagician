@@ -79,7 +79,7 @@
         "TokenMagician.psm1",
         "TokenMagician.dll-Help.xml",
         "TokenMagician.dll"
-    #)
+    )
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess.
     PrivateData = @{
