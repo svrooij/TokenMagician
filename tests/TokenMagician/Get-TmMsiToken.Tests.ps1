@@ -9,6 +9,6 @@ Describe 'Get-TmMsiToken' {
   }
 
   It 'Should throw an error if the Client ID is not a GUID' {
-    { Get-TmMsiToken -ClientId 'not-a-guid' -Tenant xxx -Scope https://graph.microsoft.com./default } | Should -Throw
+    { Get-TmMsiToken -TenantId xxx -ClientId 'not-a-guid' -Scope https://graph.microsoft.com./default } | Should -Throw
   }
 }
