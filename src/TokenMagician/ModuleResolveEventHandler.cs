@@ -10,12 +10,12 @@ namespace TokenMagician;
 public class ModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAssemblyCleanup
 {
     // Get the path of the dependency directory.
-        // In this case we find it relative to the AlcModule.Cmdlets.dll location
-        private static readonly string s_dependencyDirPath = Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!);
+    // In this case we find it relative to the AlcModule.Cmdlets.dll location
+    private static readonly string s_dependencyDirPath = Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!);
 
-        private static readonly ModuleAssemblyLoadContext s_dependencyAlc =
-            new ModuleAssemblyLoadContext(s_dependencyDirPath);
-    
+    private static readonly ModuleAssemblyLoadContext s_dependencyAlc =
+        new ModuleAssemblyLoadContext(s_dependencyDirPath);
+
     /// <summary>
     /// Called when the module is imported into the session, used to hook into the AssemblyLoadContext
     /// </summary>

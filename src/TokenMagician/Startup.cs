@@ -15,9 +15,9 @@ public class Startup : PsStartup
     /// <param name="services"></param>
     public override void ConfigureServices(IServiceCollection services)
     {
-        
+
     }
-    
+
     /// <summary>
     /// Configure the logging for the module.
     /// </summary>
@@ -27,7 +27,7 @@ public class Startup : PsStartup
         return builder =>
         {
             builder.DefaultLevel = LogLevel.Information;
-            
+
             builder.IncludeCategory = true;
             builder.StripNamespace = true;
         };
