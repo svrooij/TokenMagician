@@ -23,7 +23,7 @@ public class ModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAsse
     {
         // This is called when the module is imported into the session
         // and can be used to initialize the module.
-        Console.WriteLine("Module imported");
+        Console.WriteLine("Attaching custom AssemblyLoadContext");
         AssemblyLoadContext.Default.Resolving += ResolveAssembly;
     }
 
@@ -34,32 +34,36 @@ public class ModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAsse
     {
         // This is called when the module is removed from the session
         // and can be used to cleanup the module.
-        Console.WriteLine("Module removed");
+        Console.WriteLine("Removing custom AssemblyLoadContext");
         AssemblyLoadContext.Default.Resolving -= ResolveAssembly;
     }
 
     private static Assembly? ResolveAssembly(AssemblyLoadContext defaultAlc, AssemblyName assemblyToResolve)
     {
-        // We only want to resolve the Alc.Engine.dll assembly here.
-        // Because this will be loaded into the custom ALC,
-        // all of *its* dependencies will be resolved
-        // by the logic we defined for that ALC's implementation.
-        //
-        // Note that we are safe in our assumption that the name is enough
-        // to distinguish our assembly here,
-        // since it's unique to our module.
-        // There should be no other AlcModule.Engine.dll on the system.
+        // Check if the assembly is already loaded in the default ALC
+        // And return it no matter of the requested version.
+        // This will "redirect" the request assembly to the version already loaded.
+        var assembly = defaultAlc.Assemblies.FirstOrDefault(assembly => assembly.GetName().Name == assemblyToResolve.Name);
+        if (assembly != null)
+        {
+            var assemblyName = assembly.GetName();
+            if(assemblyName.Version != assemblyToResolve.Version)
+            {
+                Console.WriteLine($"Assembly {assemblyToResolve.Name} v{assemblyName.Version} already loaded in the default ALC (redirect from v{assemblyToResolve.Version})");
+            } else {
+                Console.WriteLine($"Assembly {assemblyToResolve.Name} v{assemblyName.Version} already loaded in the default ALC");
+            }
+            return assembly;
+        }
+
+        // Check if we can find the assembly in the dependency directory
+        // return null to let the default ALC handle the resolution
         if (!File.Exists(Path.Combine(s_dependencyDirPath, $"{assemblyToResolve.Name}.dll")))
         {
             Console.WriteLine($"Assembly {assemblyToResolve.Name} not found in {s_dependencyDirPath}");
             return null;
         }
 
-        // Allow our ALC to handle the directory discovery concept
-        //
-        // This is where Alc.Engine.dll is loaded into our custom ALC
-        // and then passed through into PowerShell's ALC,
-        // becoming the bridge between both
         return s_dependencyAlc.LoadFromAssemblyName(assemblyToResolve);
     }
 }

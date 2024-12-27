@@ -72,12 +72,18 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
     public string? UserAssignedIdentity { get; set; }
 
 
-    [ServiceDependency(Required = true)]
+    [ServiceDependency(Required = false)]
     private Microsoft.Extensions.Logging.ILogger<GetMsiToken>? _logger;
 
     /// <inheritdoc />
     public override async Task ProcessRecordAsync(CancellationToken cancellationToken)
     {
+        if (!Guid.TryParse(ClientId, out var _))
+        {
+            _logger?.LogWarning("Client ID is not an expected GUID.");
+            this.WriteError(new ErrorRecord(new ArgumentException("Client ID is not an expected GUID."), "InvalidClientId", ErrorCategory.InvalidArgument, ClientId));
+            return;
+        }
         _logger?.LogInformation("Getting a token for {Scope} in tenant: {TenantId} using managed identity", Scope, TenantId);
 
         // Create MSI credential (if the UserAssignedIdentity is set, it will use that, otherwise it will use the system assigned identity)
