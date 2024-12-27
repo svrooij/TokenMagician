@@ -9,8 +9,8 @@ if (-not $IsCoreClr) {
     # just load the module assembly directly.
 
     # The type can be any type within our ALCLoader project
-    $innerMod = if ('TokenMagician.GetMsiTokenCommand' -as [type]) {
-        $modAssembly = [ALCLoader.ConvertToNewtonsoftJsonCommand].Assembly
+    $innerMod = if ('TokenMagician.GetMsiToken' -as [type]) {
+        $modAssembly = [TokenMagician.GetMsiToken].Assembly
         &$importModule -Assembly $modAssembly -Force -PassThru
     }
     else {

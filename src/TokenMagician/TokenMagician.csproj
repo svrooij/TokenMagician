@@ -13,7 +13,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-	  <NoWarn>$(NoWarn);CS1591</NoWarn>
+	  <NoWarn>$(NoWarn);CS1591;CS8633</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
