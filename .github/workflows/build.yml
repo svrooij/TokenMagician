@@ -93,7 +93,7 @@ jobs:
           files: ${{ github.workspace }}/testresults/*.xml
 
   publish-psgallery:
-    name: 📦 Publish TokenMagician to PowerShell Gallery
+    name: 📦 Publish PowerShell Gallery
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     needs: [testps]

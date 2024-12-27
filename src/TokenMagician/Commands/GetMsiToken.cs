@@ -1,4 +1,3 @@
-using TokenMagician.Loader;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using System.Management.Automation;
@@ -78,7 +77,7 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
 
     /// <inheritdoc />
     public override async Task ProcessRecordAsync(CancellationToken cancellationToken)
-    {        
+    {
         _logger?.LogInformation("Getting a token for {Scope} in tenant: {TenantId} using managed identity", Scope, TenantId);
 
         // Create MSI credential (if the UserAssignedIdentity is set, it will use that, otherwise it will use the system assigned identity)
@@ -95,7 +94,7 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
         _logger?.LogDebug("Got MSI token");
 
         // Use the MSI token to get a token for the requested scope
-        var tokenCredential = new ClientAssertionCredential(TenantId!, ClientId!,() => token.Token);
+        var tokenCredential = new ClientAssertionCredential(TenantId!, ClientId!, () => token.Token);
 
         // Fix the scope
         if (!Scope!.EndsWith("/.default"))

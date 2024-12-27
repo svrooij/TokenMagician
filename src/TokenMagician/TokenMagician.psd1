@@ -2,7 +2,7 @@
     # Script module or binary module file associated with this manifest.
     # This loads the psm1 file, which in turn loads the TokenMagician.Loader.dll which will then load the actual module.
     # This is to setup the Assembly Load Context for the module and its dependencies.
-    RootModule = 'TokenMagician.psm1'
+    RootModule = 'TokenMagician.dll'
 
     # Version number of this module.
     ModuleVersion = '0.1.0'
@@ -59,25 +59,25 @@
     # FunctionsToExport = @()
 
     # Cmdlets to export from this module.
-    CmdletsToExport = @(
-        "Get-TmMsiToken"
-    )
+    # CmdletsToExport = @(
+    #     "Get-TmMsiToken"
+    # )
 
     # Variables to export from this module.
     # VariablesToExport = @()
 
     # Aliases to export from this module.
-    AliasesToExport = @(
-        "Get-MsiToken"
-    )
+    # AliasesToExport = @(
+    #     "Get-MsiToken"
+    # )
 
     # List of all files included in this module.
-    FileList = @(
-        "TokenMagician.psd1",
-        "TokenMagician.psm1",
-        "TokenMagician.dll-Help.xml",
-        "TokenMagician.dll"
-    )
+    # FileList = @(
+    #     "TokenMagician.psd1",
+    #     "TokenMagician.psm1",
+    #     "TokenMagician.dll-Help.xml",
+    #     "TokenMagician.dll"
+    # )
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess.
     PrivateData = @{
