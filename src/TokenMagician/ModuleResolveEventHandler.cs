@@ -15,6 +15,10 @@ public class ModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAsse
 
         private static readonly ModuleAssemblyLoadContext s_dependencyAlc =
             new ModuleAssemblyLoadContext(s_dependencyDirPath);
+    
+    /// <summary>
+    /// Called when the module is imported into the session, used to hook into the AssemblyLoadContext
+    /// </summary>
     public void OnImport()
     {
         // This is called when the module is imported into the session
@@ -23,6 +27,9 @@ public class ModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAsse
         AssemblyLoadContext.Default.Resolving += ResolveAssembly;
     }
 
+    /// <summary>
+    /// Called when the module is removed from the session, used to cleanup the module.
+    /// </summary>
     public void OnRemove(PSModuleInfo module)
     {
         // This is called when the module is removed from the session
@@ -31,7 +38,7 @@ public class ModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAsse
         AssemblyLoadContext.Default.Resolving -= ResolveAssembly;
     }
 
-    private static Assembly ResolveAssembly(AssemblyLoadContext defaultAlc, AssemblyName assemblyToResolve)
+    private static Assembly? ResolveAssembly(AssemblyLoadContext defaultAlc, AssemblyName assemblyToResolve)
     {
         // We only want to resolve the Alc.Engine.dll assembly here.
         // Because this will be loaded into the custom ALC,
