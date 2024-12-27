@@ -1,3 +1,4 @@
+using TokenMagician.Loader;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using System.Management.Automation;
@@ -23,7 +24,7 @@ namespace TokenMagician;
 [OutputType(typeof(string))] // You can specify an output type as you're used to.
 [GenerateBindings] // If your class is partial, and you want to go for max speed, add this attribute to have it generate the bindings at compile time.
 [Alias("Get-MsiToken")]
-public partial class GetMsiToken : DependencyCmdlet<Startup>
+public partial class GetMsiTokenCommand : DependencyCmdlet<Startup>
 {
     /// <summary>
     /// Specifies the tenant id for which you want a token

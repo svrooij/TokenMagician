@@ -34,6 +34,12 @@ Connect-MgGraph -AccessToken $token
 Get-MgUser -Top 2
 ```
 
+## Module loader
+
+Apperantly PowerShell shares all assemblies with all loaded modules, if a previously loaded module uses an assembly that you want to use, but it's a different version things fail.
+
+This module uses code from [Jordan Borean](https://github.com/jborean93) to load the module in its own "assembly context", see [this repo](https://github.com/jborean93/PowerShell-ALC/tree/main/ALCLoader)
+
 [badge_license]: https://img.shields.io/github/license/svrooij/TokenMagician?style=for-the-badge
 [link_license]: https://github.com/svrooij/TokenMagician/blob/main/LICENSE.txt
 [badge_powershell]: https://img.shields.io/powershellgallery/v/TokenMagician?style=for-the-badge&logo=powershell&logoColor=white
