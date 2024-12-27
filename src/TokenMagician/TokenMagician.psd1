@@ -1,6 +1,8 @@
 ﻿@{
     # Script module or binary module file associated with this manifest.
-    RootModule = 'TokenMagician.dll'
+    # This loads the psm1 file, which in turn loads the TokenMagician.Loader.dll which will then load the actual module.
+    # This is to setup the Assembly Load Context for the module and its dependencies.
+    RootModule = 'TokenMagician.psm1'
 
     # Version number of this module.
     ModuleVersion = '0.1.0'
