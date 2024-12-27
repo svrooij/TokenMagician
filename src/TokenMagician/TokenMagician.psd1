@@ -59,21 +59,17 @@
     # FunctionsToExport = @()
 
     # Cmdlets to export from this module.
-    # CmdletsToExport = @(
-    #     "Deploy-WtWin32App",
-    #     "Get-WtWin32Apps",
-    #     "New-IntuneWinPackage",
-    #     "New-WtWingetPackage",
-    #     "Remove-WtWin32App",
-    #     "Unprotect-IntuneWinPackage"
-    #     "Update-WtIntuneApp"
-    # )
+    CmdletsToExport = @(
+        "Get-TmMsiToken"
+    )
 
     # Variables to export from this module.
     # VariablesToExport = @()
 
     # Aliases to export from this module.
-    # AliasesToExport = @()
+    AliasesToExport = @(
+        "Get-MsiToken"
+    )
 
     # List of all files included in this module.
     FileList = @(

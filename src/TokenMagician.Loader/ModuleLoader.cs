@@ -28,6 +28,7 @@ public class ModuleLoader : AssemblyLoadContext
     private ModuleLoader(string mainModulePathAssemblyPath)
         : base (name: "TokenMagician", isCollectible: false)
     {
+        Console.WriteLine($"Loading module from {mainModulePathAssemblyPath}");
         _assemblyDir = Path.GetDirectoryName(mainModulePathAssemblyPath) ?? "";
         _thisAssembly = typeof(ModuleLoader).Assembly;
         _thisAssemblyName = _thisAssembly.GetName();
@@ -62,6 +63,7 @@ public class ModuleLoader : AssemblyLoadContext
     /// </summary>
     public static Assembly Initialize()
     {
+        Console.WriteLine("Initializing ModuleLoader");
         ModuleLoader? instance = _instance;
         if (instance is not null)
         {
@@ -72,6 +74,7 @@ public class ModuleLoader : AssemblyLoadContext
         {
             if (_instance is not null)
             {
+                Console.WriteLine("ModuleLoader already initialized");
                 return _instance._moduleAssembly;
             }
 

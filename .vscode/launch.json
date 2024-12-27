@@ -11,7 +11,7 @@
       "preLaunchTask": "dotnet: build-module", // replace with your actual build task name
       "script": "pwsh.exe -noexit -command Import-Module .\\bin\\Debug\\net6.0\\TokenMagician.dll", // replace with your actual script path
       //"script": "-noexit -command &{ Import-Module .\\bin\\TokenMagician.dll }", // replace with your actual script path
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}\\src\\TokenMagician"
     }
   ]
 }
