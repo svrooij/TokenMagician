@@ -23,7 +23,6 @@
 			<PrivateAssets>All</PrivateAssets>
 		</PackageReference>
     <PackageReference Include="Svrooij.PowerShell.DI" Version="1.2.0" />
-	<ProjectReference Include="..\TokenMagician.Loader\TokenMagician.Loader.csproj" />
   </ItemGroup>
 
 	<Target Name="GenerateDocumentation" AfterTargets="AfterBuild" Outputs="$(PowerShellDocsFile)" Condition="!Exists($(PowerShellDocsFile))">

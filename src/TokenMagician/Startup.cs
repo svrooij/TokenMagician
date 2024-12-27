@@ -2,27 +2,34 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Svrooij.PowerShell.DI;
 
-namespace TokenMagician
+namespace TokenMagician;
+
+/// <summary>
+/// The startup class for the module.
+/// </summary>
+public class Startup : PsStartup
 {
-    public class Startup : PsStartup
+    /// <summary>
+    /// Configure the services for the module.
+    /// </summary>
+    /// <param name="services"></param>
+    public override void ConfigureServices(IServiceCollection services)
     {
-        public override void ConfigureServices(IServiceCollection services)
-        {
-            // Add your services here
-            //services.AddSingleton<ISampleService, SampleService>();
-        }
         
-        // Optionally over the logging configuration
-        public override Action<Svrooij.PowerShell.DI.Logging.PowerShellLoggerConfiguration> ConfigurePowerShellLogging()
+    }
+    
+    /// <summary>
+    /// Configure the logging for the module.
+    /// </summary>
+    /// <returns></returns>
+    public override Action<Svrooij.PowerShell.DI.Logging.PowerShellLoggerConfiguration> ConfigurePowerShellLogging()
+    {
+        return builder =>
         {
-            return builder =>
-            {
-                builder.DefaultLevel = LogLevel.Information;
-                //builder.LogLevel["Svrooij.PowerShell.DependencyInjection.Sample.TestSampleCmdletCommand"] = LogLevel.Debug;
-                // builder.LogLevel["Svrooij.PowerShell.DependencyInjection.Sample.TestService"] = LogLevel.Information;
-                builder.IncludeCategory = true;
-                builder.StripNamespace = true;
-            };
-        }
+            builder.DefaultLevel = LogLevel.Information;
+            
+            builder.IncludeCategory = true;
+            builder.StripNamespace = true;
+        };
     }
 }

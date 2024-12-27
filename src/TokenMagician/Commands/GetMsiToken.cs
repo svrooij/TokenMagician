@@ -1,4 +1,3 @@
-using TokenMagician.Loader;
 using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using System.Management.Automation;
