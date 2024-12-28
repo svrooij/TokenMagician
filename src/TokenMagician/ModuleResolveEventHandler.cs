@@ -40,20 +40,12 @@ public class ModuleResolveEventHandler : IModuleAssemblyInitializer, IModuleAsse
 
     private static Assembly? ResolveAssembly(AssemblyLoadContext defaultAlc, AssemblyName assemblyToResolve)
     {
-        // Check if the assembly is already loaded in the default ALC
-        // And return it no matter of the requested version.
-        // This will "redirect" the request assembly to the version already loaded.
-        var assembly = defaultAlc.Assemblies.FirstOrDefault(assembly => assembly.GetName().Name == assemblyToResolve.Name);
-        if (assembly != null)
+        // Check if the assembly is already loaded in the dependency ALC by fullname,
+        // returning null will result in the default ALC handling the resolution
+        if (defaultAlc.Assemblies.Any(assembly => assembly.FullName == assemblyToResolve.FullName))
         {
-            var assemblyName = assembly.GetName();
-            if(assemblyName.Version != assemblyToResolve.Version)
-            {
-                Console.WriteLine($"Assembly {assemblyToResolve.Name} v{assemblyName.Version} already loaded in the default ALC (redirect from v{assemblyToResolve.Version})");
-            } else {
-                Console.WriteLine($"Assembly {assemblyToResolve.Name} v{assemblyName.Version} already loaded in the default ALC");
-            }
-            return assembly;
+            Console.WriteLine($"Assembly {assemblyToResolve.FullName} already loaded in the dependency ALC");
+            return null;
         }
 
         // Check if we can find the assembly in the dependency directory

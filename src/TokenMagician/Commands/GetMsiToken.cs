@@ -70,7 +70,12 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
         Position = 4,
         ValueFromPipelineByPropertyName = true)]
     public string? UserAssignedIdentity { get; set; }
-
+    
+    /// <summary>
+    /// Decode the tokens and return the claims
+    /// </summary>
+    [Parameter(Mandatory = false, DontShow = true)]
+    public SwitchParameter DecodeToken { get; set; }
 
     [ServiceDependency(Required = false)]
     private Microsoft.Extensions.Logging.ILogger<GetMsiToken>? _logger;
@@ -87,7 +92,9 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
         _logger?.LogInformation("Getting a token for {Scope} in tenant: {TenantId} using managed identity", Scope, TenantId);
 
         // Create MSI credential (if the UserAssignedIdentity is set, it will use that, otherwise it will use the system assigned identity)
-        var msiCredential = new ManagedIdentityCredential(UserAssignedIdentity);
+        var msiCredential = string.IsNullOrEmpty(UserAssignedIdentity)
+            ? new ManagedIdentityCredential()
+            : new ManagedIdentityCredential(UserAssignedIdentity);
 
         // Fix the MsiScope
         if (!MsiScope.EndsWith("/.default"))
@@ -96,11 +103,30 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
         }
 
         // Get a token for the MsiScope
-        var token = await msiCredential.GetTokenAsync(new TokenRequestContext(new[] { MsiScope }), cancellationToken);
+        AccessToken? msiToken = null;
+        try
+        {
+            msiToken = await msiCredential.GetTokenAsync(new TokenRequestContext(new[] { MsiScope }), cancellationToken);
+        } catch (Exception ex)
+        {
+            // The logger seems not to be working, so we'll use the default WriteError
+            _logger?.LogError(ex, "Failed to get MSI token");
+            this.WriteError(new ErrorRecord(ex, "FailedToGetMsiToken", ErrorCategory.AuthenticationError, null));
+            return;
+        }
+        
+        
         _logger?.LogDebug("Got MSI token");
+        if (DecodeToken)
+        {
+            // Decode the token
+            var decodedMsiToken =
+                new Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler().ReadToken(msiToken.Value.Token) as Microsoft.IdentityModel.JsonWebTokens.JsonWebToken;
+            this.WriteInformation(decodedMsiToken?.Claims, new string[] {"MsiToken"} );
+        }
 
         // Use the MSI token to get a token for the requested scope
-        var tokenCredential = new ClientAssertionCredential(TenantId!, ClientId!, () => token.Token);
+        var tokenCredential = new ClientAssertionCredential(TenantId, ClientId, (_) => Task.FromResult(msiToken.Value.Token));
 
         // Fix the scope
         if (!Scope!.EndsWith("/.default"))
@@ -109,8 +135,24 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
         }
 
         // Get a token for the requested scope
-        var scopeToken = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { Scope! }), cancellationToken);
-        _logger?.LogInformation("Got access token for {Tenant} that expires at {ExpiresAt}", TenantId, scopeToken.ExpiresOn);
-        WriteObject(scopeToken.Token);
+        try
+        {
+            var scopeToken = await tokenCredential.GetTokenAsync(new TokenRequestContext(new[] { Scope! }), cancellationToken);
+            _logger?.LogInformation("Got access token for {Tenant} that expires at {ExpiresAt}", TenantId, scopeToken.ExpiresOn);
+
+            if (DecodeToken)
+            {
+                var decodedScopeToken =
+                    new Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler().ReadToken(scopeToken.Token) as Microsoft.IdentityModel.JsonWebTokens.JsonWebToken;
+                this.WriteInformation(decodedScopeToken?.Claims, new string[] {"ScopeToken"} );
+            }
+        
+            WriteObject(scopeToken.Token);
+        } catch (Exception ex)
+        {
+            _logger?.LogError(ex, "Failed to get access token");
+            this.WriteError(new ErrorRecord(ex, "FailedToGetAccessToken", ErrorCategory.AuthenticationError, null));
+        }
+        
     }
 }
