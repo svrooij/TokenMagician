@@ -26,7 +26,7 @@ public class Startup : PsStartup
     {
         return builder =>
         {
-            builder.DefaultLevel = LogLevel.Information;
+            builder.DefaultLevel = LogLevel.Debug;
 
             builder.IncludeCategory = true;
             builder.StripNamespace = true;

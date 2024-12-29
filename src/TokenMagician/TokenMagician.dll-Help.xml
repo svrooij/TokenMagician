@@ -57,7 +57,9 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
           <maml:name>MsiScope</maml:name>
           <maml:description>
-            <maml:para />
+            <maml:para>
+            The MSI scope to use, defaults to `api://AzureADTokenExchange/.default`, see this page for options
+            </maml:para>
           </maml:description>
           <command:parameterValue required="false" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -77,6 +79,19 @@
             <maml:name>String</maml:name>
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>DecodeToken</maml:name>
+          <maml:description>
+            <maml:para>
+            Decode the tokens and return the claims
+            </maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
       </command:syntaxItem>
     </command:syntax>
@@ -123,7 +138,9 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="3" aliases="none">
         <maml:name>MsiScope</maml:name>
         <maml:description>
-          <maml:para />
+          <maml:para>
+            The MSI scope to use, defaults to `api://AzureADTokenExchange/.default`, see this page for options
+            </maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -143,6 +160,19 @@
           <maml:name>String</maml:name>
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <maml:name>DecodeToken</maml:name>
+        <maml:description>
+          <maml:para>
+            Decode the tokens and return the claims
+            </maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:returnValues>
