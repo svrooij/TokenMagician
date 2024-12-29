@@ -70,7 +70,7 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
         Position = 4,
         ValueFromPipelineByPropertyName = true)]
     public string? UserAssignedIdentity { get; set; }
-    
+
     /// <summary>
     /// Decode the tokens and return the claims
     /// </summary>
@@ -107,22 +107,23 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
         try
         {
             msiToken = await msiCredential.GetTokenAsync(new TokenRequestContext(new[] { MsiScope }), cancellationToken);
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             // The logger seems not to be working, so we'll use the default WriteError
             _logger?.LogError(ex, "Failed to get MSI token");
             this.WriteError(new ErrorRecord(ex, "FailedToGetMsiToken", ErrorCategory.AuthenticationError, null));
             return;
         }
-        
-        
+
+
         _logger?.LogDebug("Got MSI token");
         if (DecodeToken)
         {
             // Decode the token
             var decodedMsiToken =
                 new Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler().ReadToken(msiToken.Value.Token) as Microsoft.IdentityModel.JsonWebTokens.JsonWebToken;
-            this.WriteInformation(decodedMsiToken?.Claims, new string[] {"MsiToken"} );
+            this.WriteInformation(decodedMsiToken?.Claims, new string[] { "MsiToken" });
         }
 
         // Use the MSI token to get a token for the requested scope
@@ -144,15 +145,16 @@ public partial class GetMsiToken : DependencyCmdlet<Startup>
             {
                 var decodedScopeToken =
                     new Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler().ReadToken(scopeToken.Token) as Microsoft.IdentityModel.JsonWebTokens.JsonWebToken;
-                this.WriteInformation(decodedScopeToken?.Claims, new string[] {"ScopeToken"} );
+                this.WriteInformation(decodedScopeToken?.Claims, new string[] { "ScopeToken" });
             }
-        
+
             WriteObject(scopeToken.Token);
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             _logger?.LogError(ex, "Failed to get access token");
             this.WriteError(new ErrorRecord(ex, "FailedToGetAccessToken", ErrorCategory.AuthenticationError, null));
         }
-        
+
     }
 }

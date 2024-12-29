@@ -6,7 +6,7 @@ internal class ModuleAssemblyLoadContext : AssemblyLoadContext
 {
     private readonly string _dependencyDirPath;
 
-    public ModuleAssemblyLoadContext(string dependencyDirPath): base("TokenMagician")
+    public ModuleAssemblyLoadContext(string dependencyDirPath) : base("TokenMagician")
     {
         _dependencyDirPath = dependencyDirPath;
     }
